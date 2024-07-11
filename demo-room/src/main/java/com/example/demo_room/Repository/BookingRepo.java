@@ -13,8 +13,7 @@ import java.util.Optional;
 
 public interface BookingRepo extends JpaRepository<BookedRoom,Long> {
     Optional<BookedRoom> findByConfirmationCode(String confirmationCode);
-    @Query(value = "SELECT b from BookedRoom b WHERE b.EmployeeName=:employeeName")
-    List<BookedRoom> findByEmployeeDetails(@Param("employeeName") String employeeName);
+    List<BookedRoom> findByEmployeeName( String employeeName);
 
     @Query(value= "SELECT b from BookedRoom b WHERE b.roomId=:roomId AND b.bookingDate=:bookingDate AND " +
             " ( (b.startTime<=:startTime AND b.endTime>:startTime) OR (b.startTime<:endTime AND b.endTime>:endTime) OR"

@@ -1,5 +1,8 @@
 package com.example.demo_room.Model;
 
+import com.example.demo_room.Utils.JustNumber;
+import com.example.demo_room.Utils.Numeric;
+import com.example.demo_room.Utils.StringCharacter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -15,22 +18,35 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+
 @ToString
-@Table(name="bookings")
+@Table(name="bookingg")
 
 public class BookedRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long bookingID;
     private long roomId;
-    private String EmployeeName;
-    private String EmployeeId;
-    private String Employee_ph_no;
 
+    @Size(max = 20, message = "The name must be at most 20 letters long.")
+    @StringCharacter
+    @NotEmpty(message = "employee name is required")
+    private String employeeName;
+    @NotEmpty(message = "employeeId name is required")
+    @Size(min = 10, max = 10, message = "The employee ID must be exactly 10 characters long.")
+    @Numeric
+    private String employeeId;
+    @NotEmpty(message = "employee phone Number name is required")
+    @Numeric
+    @Size(min =10,max = 10,message = "Invalid phone number")
+    private String employee_ph_no;
+    @NotNull
+    @JustNumber
+    @Min(value=1,message = "Minimum 1 person is required to book a Room")
     private int attendees;
-
+    @NotNull(message="please Enter the date for booking")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent(message = "date cant be in the past")
     private LocalDate bookingDate;
 
     private LocalTime startTime;
@@ -38,7 +54,7 @@ public class BookedRoom {
     private LocalTime endTime;
     private String confirmationCode;
     private String status;
-
+@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cRoom_id")
     private ConferenceRoom room;

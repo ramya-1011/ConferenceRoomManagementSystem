@@ -21,7 +21,7 @@ public class Site {
     private String siteId;
     private String description;
     private String pinCode;
-    @Min(value = 1,message = "total floors cant be 0")
+
     private int totalFloors;
     private String locationName;
 

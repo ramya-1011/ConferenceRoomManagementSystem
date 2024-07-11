@@ -9,14 +9,11 @@ import com.example.demo_room.Service.Interface.IBookingService;
 import com.example.demo_room.Service.Interface.IRoomService;
 import com.example.demo_room.Utils.Utils;
 import com.example.demo_room.dto.BookedRoomResponse;
-import com.example.demo_room.dto.BookingRequest;
-import com.example.demo_room.dto.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,23 +29,23 @@ public class BookingService implements IBookingService {
 
 
     @Override
-    public Response findBookingByConfirmationCode(String confirmationCode) {
-        Response response = new Response();
+    public BookedRoomResponse findBookingByConfirmationCode(String confirmationCode) {
+        BookedRoomResponse response = new BookedRoomResponse();
 
         try {
             BookedRoom booking = bookingRepo.findByConfirmationCode(confirmationCode).orElseThrow(() -> new MyException("Booking Not Found"));
             BookedRoomResponse bookingDTO = Utils.mapBookingEntityToBookingDTOPlusBookedRooms(booking, true);
-            response.setStatusCode(200);
-            response.setMessage("successful");
-            response.setBooking(bookingDTO);
+            response.setResponseCode(200);
+            response.setResponseMessage("successful");
+
 
         } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
+            response.setResponseCode(404);
+            response.setResponseMessage(e.getMessage());
 
         } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error Finding a booking: " + e.getMessage());
+            response.setResponseCode(500);
+            response.setResponseMessage("Error Finding a booking: " + e.getMessage());
 
         }
         return response;
@@ -56,54 +53,44 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public Response getAllBookings() {
-        Response response = new Response();
+    public List<BookedRoomResponse> getAllBookings() {
+        BookedRoomResponse response = new BookedRoomResponse();
 
-        try {
+
             List<BookedRoom> bookingList = bookingRepo.findAll(Sort.by(Sort.Direction.ASC, "bookingID"));
             List<BookedRoomResponse> bookingDTOList = Utils.mapBookingListEntityToBookingListDTO(bookingList);
-            response.setStatusCode(200);
-            response.setMessage("successful");
-            response.setBookingsList(bookingDTOList);
+            response.setResponseCode(200);
+            response.setResponseMessage("successful");
+return bookingDTOList;
 
-        } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-
-        } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error Getting all bookings: " + e.getMessage());
-
-        }
-        return response;
 
     }
 
     @Override
-    public Response cancelBooking(Long bookingId) {
-        Response response = new Response();
+    public BookedRoomResponse cancelBooking(Long bookingId) {
+        BookedRoomResponse response = new BookedRoomResponse();
 
         try {
 
             bookingRepo.findById(bookingId).orElseThrow(() -> new MyException("Booking Does Not Exist"));
             bookingRepo.deleteById(bookingId);
-            response.setStatusCode(200);
-            response.setMessage("successful");
+            response.setResponseCode(200);
+            response.setResponseMessage("successful");
 
         } catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
+            response.setResponseCode(404);
+            response.setResponseMessage(e.getMessage());
 
         } catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error Cancelling a booking: " + e.getMessage());
+            response.setResponseCode(500);
+            response.setResponseMessage("Error Cancelling a booking: " + e.getMessage());
 
         }
         return response;
 
     }
-    public BookedRoom addBooking(BookedRoomResponse bookedRoom)  throws Exception {
-        Response response = new Response();
+    public BookedRoomResponse addBooking(BookedRoom bookedRoom)  throws Exception {
+
         Optional<ConferenceRoom> room = Optional.ofNullable(roomRepo.findById(bookedRoom.getRoomId()).orElseThrow(() -> new MyException("room not found")));
         LocalDate currentDate= LocalDate.now();
         try{
@@ -132,8 +119,9 @@ public class BookingService implements IBookingService {
                 }
             String bookingConfirmationCode = Utils.generateRandomConfirmationCode(10);
             bookedRoom.setConfirmationCode(bookingConfirmationCode);
-            BookedRoom savedBooking=Utils.mapBookingEntityToBookingDTO(bookedRoom)
-            return bookingRepo.save(bookedRoom);
+            bookingRepo.save(bookedRoom);
+            BookedRoomResponse savedBooking=Utils.mapBookingEntityToBookingDTO(bookedRoom);
+            return savedBooking;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

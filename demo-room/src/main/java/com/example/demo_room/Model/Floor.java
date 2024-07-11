@@ -14,12 +14,11 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Floor extends CommonAPIResponse {
+public class Floor   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String floorId;
-    @Min(value =0,message = "rooms cant be less than 0")
     private int totalRooms;
     @ManyToOne
     @JoinColumn(name = "site_id")

@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface SiteRepo extends JpaRepository<Site,Integer> {
 
-    @Query(value = "SELECT s From Site s WHERE s.city.id=:id ")
-  List<Site>  getByLocation(@Param("id") int id);
+
+  List<Site>  getByCityId(int id);
 
 
     Page<Site> findAll( Pageable pageable);

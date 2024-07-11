@@ -6,15 +6,18 @@ import com.example.demo_room.dto.APIResponse;
 import com.example.demo_room.dto.SiteRequest;
 import com.example.demo_room.dto.SiteResponse;
 import com.example.demo_room.Model.Site;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/site")
 @CrossOrigin("*")
 public class SiteController {
@@ -25,13 +28,13 @@ public class SiteController {
 
 
     @GetMapping("/byId/{id}")
-    public ResponseEntity<SiteResponse> getSiteById(@PathVariable int id) {
+    public ResponseEntity<?> getSiteById(@PathVariable int id) {
         SiteResponse site = siteService.getById(id);
         return new ResponseEntity<>(site, HttpStatus.OK);
     }
 
     @PostMapping("/add-site")
-    public  ResponseEntity<SiteResponse> addNewSite(@RequestBody SiteRequest site) {
+    public  ResponseEntity<SiteResponse> addNewSite(@Valid @RequestBody SiteRequest site) {
          SiteResponse savedSite = siteService.addNewSite(site);
         return ResponseEntity.status(savedSite.getStatusCode()).body(savedSite);
     }
@@ -41,7 +44,7 @@ public class SiteController {
     }
     @GetMapping("/byLocation/{id}")
     public List<Site> getByLocation(@PathVariable int id){
-        return siteRepo.getByLocation(id);
+        return siteRepo.getByCityId(id);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<SiteResponse> deleteSite(@PathVariable int id){
@@ -49,7 +52,7 @@ public class SiteController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 @PutMapping("/update/{id}")
-    public ResponseEntity<SiteResponse> updateSite(@PathVariable int id,@RequestBody SiteRequest site){
+    public ResponseEntity<SiteResponse> updateSite(@PathVariable int id,@Valid @RequestBody SiteRequest site){
     SiteResponse updatedSite = siteService.updateSite(id, site);
     if (updatedSite == null) {
         return ResponseEntity.notFound().build();

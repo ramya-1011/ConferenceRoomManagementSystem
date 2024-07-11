@@ -18,7 +18,6 @@ public class FloorResponse extends CommonAPIResponse {
     private int id;
     private String floorId;
     private int totalRooms;
-    private City city;
     private Site site;
     List<ConferenceRoom> rooms;
 }

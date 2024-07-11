@@ -21,7 +21,6 @@ public class CityResponse extends CommonAPIResponse{
     private String state;
     private int totalSites;
     private List<Site> sites;
-    private List<ConferenceRoom> rooms;
     private int statusCode;
 
 }

@@ -5,15 +5,17 @@ import com.example.demo_room.Repository.FloorRepo;
 import com.example.demo_room.Service.Implementation.FloorService;
 import com.example.demo_room.dto.FloorRequest;
 import com.example.demo_room.dto.FloorResponse;
-import com.example.demo_room.dto.RoomResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 @CrossOrigin("*")
 @RequestMapping("/floor")
 public class FloorController {
@@ -33,7 +35,7 @@ public class FloorController {
 
 }
     @PostMapping("/add")
-    public ResponseEntity<FloorResponse> addFloor(@RequestBody FloorRequest floor){
+    public ResponseEntity<FloorResponse> addFloor(@Valid  @RequestBody FloorRequest floor){
 
         FloorResponse savedFloor = null;
         try {
@@ -44,7 +46,7 @@ public class FloorController {
         return ResponseEntity.status(savedFloor.getResponseCode()).body(savedFloor);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<FloorResponse> updateFloor(@PathVariable int id,@RequestBody FloorRequest floor){
+    public ResponseEntity<FloorResponse> updateFloor(@PathVariable int id,@Valid @RequestBody FloorRequest floor){
         FloorResponse updatedFloor = floorService.updateFloor(id, floor);
         if (updatedFloor == null) {
             return ResponseEntity.notFound().build();
@@ -60,7 +62,7 @@ public class FloorController {
     }
 @GetMapping("/getBySite/{id}")
     public List<Floor> getBySiteId(@PathVariable int id){
-    return floorRepo.getBySite(id);
+    return floorRepo.getBySiteId(id);
 }
 
 @GetMapping("/filter")

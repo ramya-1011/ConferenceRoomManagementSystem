@@ -3,15 +3,17 @@ package com.example.demo_room.Controller;
 import com.example.demo_room.Model.BookedRoom;
 import com.example.demo_room.Repository.BookingRepo;
 import com.example.demo_room.Service.Implementation.BookingService;
-import com.example.demo_room.dto.Response;
+import com.example.demo_room.dto.BookedRoomResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 @RequestMapping("/booking")
 @CrossOrigin("*")
 public class BookingController {
@@ -20,9 +22,9 @@ public class BookingController {
     @Autowired
     private BookingRepo bookingRepo;
     @PostMapping("/book-room" )
-    public ResponseEntity<?> saveBookings(@RequestBody BookedRoom room) {
+    public ResponseEntity<?> saveBookings(@Valid @RequestBody BookedRoom room) {
         try{
-            BookedRoom createdBooking=bookingService.addBooking( room);
+            BookedRoomResponse createdBooking=bookingService.addBooking( room);
             return ResponseEntity.ok(createdBooking);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -30,23 +32,22 @@ public class BookingController {
 
     }
     @GetMapping("/all")
-    public ResponseEntity<Response> getAllBookings() {
-        Response response = bookingService.getAllBookings();
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+    public List<BookedRoomResponse> getAllBookings() {
+        return bookingService.getAllBookings();
     }
     @GetMapping("/get-by-confirmation-code/{confirmationCode}")
-    public ResponseEntity<Response> getBookingByConfirmationCode(@PathVariable String confirmationCode) {
-        Response response = bookingService.findBookingByConfirmationCode(confirmationCode);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+    public ResponseEntity<BookedRoomResponse> getBookingByConfirmationCode(@PathVariable String confirmationCode) {
+        BookedRoomResponse response = bookingService.findBookingByConfirmationCode(confirmationCode);
+        return ResponseEntity.status(response.getResponseCode()).body(response);
     }
     @DeleteMapping("/cancel/{bookingId}")
-    public ResponseEntity<Response> cancelBooking(@PathVariable Long bookingId) {
-        Response response = bookingService.cancelBooking(bookingId);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+    public ResponseEntity<BookedRoomResponse> cancelBooking(@PathVariable Long bookingId) {
+        BookedRoomResponse response = bookingService.cancelBooking(bookingId);
+        return ResponseEntity.status(response.getResponseCode()).body(response);
     }
     @GetMapping("/byEmployee/{employeeName}")
     public List<BookedRoom> getByEmployeeDetails(@PathVariable String employeeName){
-        return bookingRepo.findByEmployeeDetails(employeeName);
+        return bookingRepo.findByEmployeeName(employeeName);
     }
 
 }

@@ -17,21 +17,14 @@ public interface RoomRepo extends JpaRepository<ConferenceRoom,Long> {
     List<String> findByCity();
     @Query (value="SELECT DISTINCT cr.type FROM ConferenceRoom cr")
     List<String> findByType();
-@Query(value = "SELECT r FROM ConferenceRoom r WHERE r.city.id=:id")
-     List<ConferenceRoom> findByRoomCityId(@Param("id") Integer id);
-    @Query(value = "SELECT r FROM ConferenceRoom r WHERE r.site.id=:id")
-    List<ConferenceRoom> findByRoomSiteId(@Param("id") Integer id);
+     List<ConferenceRoom> findByCityId(  Integer id);
+    List<ConferenceRoom> findBySiteId(  Integer id);
 
-
-    @Query(value = "SELECT r FROM ConferenceRoom r WHERE r.floor.id=:id")
-    List<ConferenceRoom> findByFloorId(@Param("id") Integer id);
+    List<ConferenceRoom> findByFloorId(  Integer id);
 
     List<ConferenceRoom> findByCityIdAndSiteIdAndFloorId(Integer cityId, Integer siteId, Integer floorId);
 
     List<ConferenceRoom> findByCityIdAndSiteId(Integer cityId,Integer siteId);
-
-    @Query(value = "SELECT r FROM ConferenceRoom r WHERE r.city.id=:id")
-    List<ConferenceRoom> findRoomByCity(@Param("id") long id);
     @Query(value ="SELECT cr from ConferenceRoom cr WHERE cr.id NOT in ( SELECT b.room.id FROM BookedRoom b)")
     List<ConferenceRoom> findAllAvailableRooms(@Param("id") int id);
 

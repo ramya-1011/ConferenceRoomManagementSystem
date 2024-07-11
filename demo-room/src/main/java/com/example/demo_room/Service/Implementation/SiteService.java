@@ -18,15 +18,13 @@ import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class SiteService implements ISiteService {
     @Autowired
     private final SiteRepo siteRepo;
     @Autowired
     private CityRepo cityRepo;
-    @Autowired
-    private Response responseDTO;
+
     @Override
     public SiteResponse addNewSite(SiteRequest siteRequest) {
         SiteResponse response =new SiteResponse();
@@ -37,12 +35,9 @@ public class SiteService implements ISiteService {
             site1.setDescription(siteRequest.getDescription());
             site1.setPinCode(siteRequest.getPinCode());
             site1.setTotalFloors(siteRequest.getTotalFloors());
-            site1.setLocationName(siteRequest.getLocationName());
             City city = cityRepo.findById(siteRequest.getCityId()).orElseThrow(()-> new MyException("city not found"));
-         //   site1.setFloors(siteRequest.getFloors());
             site1.setCity(city);
             Site savedSite = siteRepo.save(site1);
-        //    long cityId=response.getCity().getId();
 
             response =Utils.mapSiteEntityToSiteResponse(savedSite);
             response.setStatusCode(200);
@@ -50,7 +45,7 @@ public class SiteService implements ISiteService {
 
         }catch (Exception e) {
             response.setStatusCode(500);
-            responseDTO.setMessage("Error saving a city " + e.getMessage());
+            response.setResponseMessage("Error saving a city " + e.getMessage());
         }
         return response;
     }
@@ -70,7 +65,7 @@ public class SiteService implements ISiteService {
 
             response.setStatusCode(500);
             response.setResponseMessage("error site not found");
-            responseDTO.setMessage("Error saving a city " + e.getMessage());
+
         }
         return response;
     }
@@ -81,8 +76,6 @@ public class SiteService implements ISiteService {
             try {
                 Site site = siteRepo.findById(id).orElseThrow(()-> new MyException("site not found"));
                 if (siteRequest.getSiteId() != null) site.setSiteId( siteRequest.getSiteId());
-                if (siteRequest.getLocationName() != null) site.setLocationName(  siteRequest.getLocationName());
-             //   if (siteRequest.getFloors() != null) site.setFloors(  siteRequest.getFloors());
                 if (siteRequest.getTotalFloors() != 0) site.setTotalFloors(  siteRequest.getTotalFloors());
                 if (siteRequest.getPinCode() != null) site.setPinCode(  siteRequest.getPinCode());
                 if(siteRequest.getDescription()!=null) site.setDescription(siteRequest.getDescription());
@@ -111,10 +104,10 @@ public class SiteService implements ISiteService {
                 response.setStatusCode(200);
             }catch (MyException e) {
                 response.setStatusCode(404);
-                responseDTO.setMessage(e.getMessage());
+                response.setResponseMessage(e.getMessage());
             } catch (Exception e) {
                 response.setStatusCode(500);
-                responseDTO.setMessage("Error saving a room " + e.getMessage());
+                response.setResponseMessage("Error saving a room " + e.getMessage());
             }
             return  response;
 

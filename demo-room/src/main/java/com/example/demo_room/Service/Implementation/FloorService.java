@@ -64,8 +64,8 @@ public class FloorService {
                     throw new IllegalArgumentException("site id mentioned is not in the city selected");
                 }
                  floorRepo.save(floor);
-                floor.setResponseCode(Constants.ResponseCode.SUCCESS.value());
-                floor.setResponseMessage("updated");
+                response.setResponseCode(Constants.ResponseCode.SUCCESS.value());
+                response.setResponseMessage("updated");
                 return Utils.mapFloorEntityToFloorResponse(floor);
             }catch (MyException e){
                 response.setResponseCode(404);
@@ -84,8 +84,8 @@ public class FloorService {
         try {
              Floor floor =  floorRepo.findById(id).orElseThrow(() -> new MyException("floor Not Found"));
             floorResponse= Utils.mapFloorEntityToFloorResponse(floor);
-            floor.setResponseMessage("fetched successfully");
-            floor.setResponseCode( 200);
+            floorResponse.setResponseMessage("fetched successfully");
+            floorResponse.setResponseCode( 200);
         }catch (MyException e) {
             floorResponse.setResponseMessage("error ");
             floorResponse.setResponseCode(404);

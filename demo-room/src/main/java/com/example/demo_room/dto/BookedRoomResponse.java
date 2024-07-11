@@ -15,12 +15,12 @@ import java.time.LocalTime;
 
 
 
-public class BookedRoomResponse {
+public class BookedRoomResponse extends CommonAPIResponse{
     private long bookingID;
     private long roomId;
-    private String EmployeeName;
-    private String EmployeeId;
-    private String Employee_ph_no;
+    private String employeeName;
+    private String employeeId;
+    private String employee_ph_no;
     private int attendees;
     private LocalDate bookingDate;
     private LocalTime startTime;
@@ -28,14 +28,5 @@ public class BookedRoomResponse {
     private String confirmationCode;
     private  RoomResponse room;
 
-    public BookedRoomResponse(long bookingID, String employeeId, int attendees,
-                              LocalDate bookingDate, LocalTime startTime, LocalTime endTime, String confirmationCode) {
-        this.bookingID = bookingID;
-        EmployeeId = employeeId;
-        this.attendees = attendees;
-        this.bookingDate = bookingDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.confirmationCode = confirmationCode;
-    }
+
 }

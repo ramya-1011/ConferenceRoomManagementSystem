@@ -45,6 +45,7 @@ public class Utils {
         SiteResponse   response = new SiteResponse();
         response.setId(site.getId());
         response.setSiteId(site.getSiteId());
+        response.setCity(site.getCity());
         response.setLocationName(site.getLocationName());
         response.setDescription(site.getDescription());
         response.setTotalFloors(site.getTotalFloors());
@@ -55,12 +56,9 @@ public class Utils {
         FloorResponse   response = new FloorResponse();
         response.setId(floor.getId());
         response.setFloorId(floor.getFloorId());
-        response.setCity(floor.getCity());
+     //   response.setCity(floor.getCity());
         response.setSite(floor.getSite());
         response.setTotalRooms(floor.getTotalRooms());
-     //   response.setDescription(floor.getDescription());
-      //  response.setTotalRooms(floor.getTotalRooms());
-      //  response.setRooms(floor.getRooms());
 
         return  response;
     }
@@ -114,7 +112,7 @@ public class Utils {
     public static BookedRoomResponse mapBookingEntityToBookingDTOPlusBookedRooms(BookedRoom booking, boolean mapUser) {
 
         BookedRoomResponse bookingDTO = new BookedRoomResponse();
-        // Map simple fields
+
         bookingDTO.setBookingID(booking.getBookingID());
         bookingDTO.setBookingDate(booking.getBookingDate());
         bookingDTO.setStartTime(booking.getStartTime());

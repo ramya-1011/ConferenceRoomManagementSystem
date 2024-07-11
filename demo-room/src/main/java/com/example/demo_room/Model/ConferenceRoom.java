@@ -24,7 +24,7 @@ public class ConferenceRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Min(value = 1,message = "capacity should be 1 atleast")
+
     private int capacity;
     private String description;
     private String type;

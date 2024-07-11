@@ -10,10 +10,8 @@ import com.example.demo_room.Repository.RoomRepo;
 import com.example.demo_room.Repository.SiteRepo;
 import com.example.demo_room.Service.Interface.IRoomService;
 import com.example.demo_room.Utils.Utils;
-import com.example.demo_room.dto.Response;
 import com.example.demo_room.dto.RoomRequest;
 import com.example.demo_room.dto.RoomResponse;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -99,20 +97,20 @@ import java.util.List;
 
 
         @Override
-        public Response deleteRoom(Long roomId) {
-                Response response=new Response();
+        public RoomResponse deleteRoom(Long roomId) {
+                RoomResponse response=new RoomResponse();
             try {
                 roomRepo.findById(roomId).orElseThrow(() -> new MyException("Room Not Found"));
                 roomRepo.deleteById(roomId);
-                response.setStatusCode(200);
-                response.setMessage("successful");
+                response.setResponseCode(200);
+                response.setResponseMessage("successfully deleted");
 
             } catch (MyException e) {
-                response.setStatusCode(404);
-                response.setMessage(e.getMessage());
+                response.setResponseCode(404);
+                response.setResponseMessage(e.getMessage());
             } catch (Exception e) {
-                response.setStatusCode(500);
-                response.setMessage("Error saving a room " + e.getMessage());
+                response.setResponseCode(500);
+                response.setResponseMessage("Error saving a room " + e.getMessage());
             }
             return response;
 
@@ -123,12 +121,10 @@ import java.util.List;
         public RoomResponse updateRoom(long id,RoomRequest roomRequest) {
             RoomResponse response = new RoomResponse();
             try{
-                ConferenceRoom Room = roomRepo .findById(id).orElseThrow(() -> new MyException("Room Not Found"));
-                if (roomRequest.getCapacity() != 0) Room.setCapacity(roomRequest.getCapacity());
-                if (roomRequest.getDescription() != null)  Room.setDescription( roomRequest.getDescription());
-                if(roomRequest.getType()!=null) Room.setType(roomRequest.getType());
-//                Room.getCity().setId(roomRequest.getCityId());
-//                Room.getSite().setId(roomRequest.getSiteId());
+                ConferenceRoom room = roomRepo .findById(id).orElseThrow(() -> new MyException("Room Not Found"));
+                if (roomRequest.getCapacity() != 0) room.setCapacity(roomRequest.getCapacity());
+                if (roomRequest.getDescription() != null)  room.setDescription( roomRequest.getDescription());
+                if(roomRequest.getType()!=null) room.setType(roomRequest.getType());
                 System.out.println(roomRequest.getCityId());
                 City city = cityRepo.findById(roomRequest.getCityId()).orElseThrow(()->new MyException("City not found with this " +
                         "id" + roomRequest.getCityId()));
@@ -140,12 +136,12 @@ import java.util.List;
                 if(floor.getSite().getId()!=roomRequest.getSiteId()){
                     throw new IllegalArgumentException("floor id mentioned is not in the site selected");
                 }
-                Room.setFloor(floor);
-                Room.setCity(city);
-                Room.setSite(site);
+                room.setFloor(floor);
+                room.setCity(city);
+                room.setSite(site);
                 response.setResponseMessage("successful");
                 response.setResponseCode(200);
-                ConferenceRoom updatedRoom = roomRepo .save( Room);
+                ConferenceRoom updatedRoom = roomRepo .save( room);
                 return Utils.mapConferenceRoomEntityToRoomResponse (updatedRoom);
 
             }catch (MyException e){
@@ -187,9 +183,9 @@ import java.util.List;
             } else if (cityId != null && siteId != null) {
                 rooms = roomRepo.findByCityIdAndSiteId(cityId, siteId);
             } else if (siteId != null) {
-                rooms = roomRepo.findByRoomSiteId(siteId);
+                rooms = roomRepo.findBySiteId(siteId);
             } else if (cityId != null) {
-                rooms = roomRepo.findByRoomCityId(cityId);
+                rooms = roomRepo.findByCityId(cityId);
 
             } else if (floorId!=null) {
                 rooms=roomRepo.findByFloorId(floorId);
