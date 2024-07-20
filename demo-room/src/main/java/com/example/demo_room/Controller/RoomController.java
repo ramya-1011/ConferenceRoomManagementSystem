@@ -1,11 +1,14 @@
 package com.example.demo_room.Controller;
 
 import com.example.demo_room.Model.ConferenceRoom;
+import com.example.demo_room.Repository.BookingRepo;
 import com.example.demo_room.Repository.CityRepo;
 import com.example.demo_room.Repository.RoomRepo;
+import com.example.demo_room.Service.Implementation.BookingService;
 import com.example.demo_room.Service.Interface.IRoomService;
 import com.example.demo_room.dto.RoomRequest;
 import com.example.demo_room.dto.RoomResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,10 @@ public class RoomController {
     private RoomRepo roomRepo;
     @Autowired
     private final IRoomService roomService;
+    @Autowired
+    private BookingRepo bookingRepo;
+    @Autowired
+    private BookingService bookingService;
     @PostMapping("/add-room")
 public  ResponseEntity< RoomResponse> addNewRoom( @Valid @RequestBody RoomRequest conferenceRoom)
        {
@@ -52,9 +59,11 @@ public  ResponseEntity< RoomResponse> addNewRoom( @Valid @RequestBody RoomReques
     public List<ConferenceRoom> getByCity(@PathVariable int cityId){
         return roomRepo.findByCityId(cityId);
     }
+    @Transactional
     @DeleteMapping("/delete/{roomId}")
     public ResponseEntity<RoomResponse> deleteRoom(@PathVariable Long roomId) {
         RoomResponse response = roomService.deleteRoom(roomId);
+        bookingRepo.deleteByRoomId(roomId);
         return ResponseEntity.status(response.getResponseCode()).body(response);
 
     }
@@ -82,6 +91,21 @@ public  ResponseEntity< RoomResponse> addNewRoom( @Valid @RequestBody RoomReques
     }
 
 
-
+    @GetMapping("/{id}/check-bookings")
+    public ResponseEntity<?> checkBookings(@PathVariable Long id) {
+        if ( bookingService.hasBookings(id)) {
+            return ResponseEntity.ok("Room has bookings. Do you still want to delete it?");
+        } else {
+            return ResponseEntity.ok("No bookings found. Room can be deleted safely.");
+        }
+    }
+//    @GetMapping("/{id}/check-bookings-city")
+//    public ResponseEntity<?> checkBookingsCity(@PathVariable Integer id) {
+//        if ( bookingService.hasBookingsByCity(id)) {
+//            return ResponseEntity.ok("Room has bookings. Do you still want to delete it?");
+//        } else {
+//            return ResponseEntity.ok("No bookings found. Room can be deleted safely.");
+//        }
+//    }
 
 }

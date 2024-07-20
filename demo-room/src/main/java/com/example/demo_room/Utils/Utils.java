@@ -37,7 +37,7 @@ public class Utils {
         response.setId(city.getId());
         response.setName(city.getName());
         response.setState(city.getState());
-        response.setTotalSites(city.getTotalSites());
+     //   response.setTotalSites(city.getTotalSites());
 
         return  response;
     }
@@ -48,7 +48,7 @@ public class Utils {
         response.setCity(site.getCity());
         response.setLocationName(site.getLocationName());
         response.setDescription(site.getDescription());
-        response.setTotalFloors(site.getTotalFloors());
+     //   response.setTotalFloors(site.getTotalFloors());
         response.setPinCode(site.getPinCode());
         return  response;
     }
@@ -56,9 +56,9 @@ public class Utils {
         FloorResponse   response = new FloorResponse();
         response.setId(floor.getId());
         response.setFloorId(floor.getFloorId());
-     //   response.setCity(floor.getCity());
+      response.setCity(floor.getCity());
         response.setSite(floor.getSite());
-        response.setTotalRooms(floor.getTotalRooms());
+      //  response.setTotalRooms(floor.getTotalRooms());
 
         return  response;
     }
@@ -98,7 +98,7 @@ public class Utils {
     public static BookedRoomResponse mapBookingEntityToBookingDTO(BookedRoom booking) {
         BookedRoomResponse bookingDTO = new BookedRoomResponse();
         bookingDTO.setEmployeeName(booking.getEmployeeName());
-      bookingDTO.setRoomId(booking.getRoomId());
+        bookingDTO.setRoomId(booking.getRoomId());
         bookingDTO.setEmployeeId(booking.getEmployeeId());
         bookingDTO.setEmployee_ph_no(booking.getEmployee_ph_no());
         bookingDTO.setBookingID(booking.getBookingID());
@@ -109,6 +109,7 @@ public class Utils {
         bookingDTO.setConfirmationCode(booking.getConfirmationCode());
         return bookingDTO;
     }
+
     public static BookedRoomResponse mapBookingEntityToBookingDTOPlusBookedRooms(BookedRoom booking, boolean mapUser) {
 
         BookedRoomResponse bookingDTO = new BookedRoomResponse();

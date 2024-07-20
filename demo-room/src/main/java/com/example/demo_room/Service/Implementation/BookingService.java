@@ -9,6 +9,7 @@ import com.example.demo_room.Service.Interface.IBookingService;
 import com.example.demo_room.Service.Interface.IRoomService;
 import com.example.demo_room.Utils.Utils;
 import com.example.demo_room.dto.BookedRoomResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -89,36 +90,40 @@ return bookingDTOList;
         return response;
 
     }
-    public BookedRoomResponse addBooking(BookedRoom bookedRoom)  throws Exception {
-
-        Optional<ConferenceRoom> room = Optional.ofNullable(roomRepo.findById(bookedRoom.getRoomId()).orElseThrow(() -> new MyException("room not found")));
-        LocalDate currentDate= LocalDate.now();
+    @Override
+    public BookedRoomResponse addBooking(@Valid BookedRoom bookedRoom)  {
+BookedRoomResponse response=new BookedRoomResponse();
+       Optional<ConferenceRoom> room = Optional.ofNullable(roomRepo.findById(bookedRoom.getRoomId()).orElseThrow(() -> new MyException("room not found")));
+      LocalDate currentDate= LocalDate.now();
         try{
+           // BookedRoom booking=new BookedRoom();
+            // LocalDate currentDate= LocalDate.now();
             if (bookedRoom.getEndTime().isBefore(bookedRoom.getStartTime())) {
-                throw new IllegalArgumentException("Check in time must come after check out time");
+                throw new MyException("Check in time must come before check out time");
             }
             if(bookedRoom.getBookingDate().isBefore(currentDate)){
-                throw new IllegalArgumentException("date selected cannot be in past");
+                throw new MyException("date selected cannot be in past");
             }ConferenceRoom cRoom =room.get();
             if(bookedRoom.getAttendees()>cRoom.getCapacity()){
-                throw new IllegalArgumentException("attendees count is exceeding room capacity!!");
+                throw new MyException("attendees count is exceeding room capacity!! it should not exceed" + cRoom.getCapacity());
             }
             LocalDate bookingDate = bookedRoom.getBookingDate();
             LocalTime startTime = bookedRoom.getStartTime();
             LocalTime now = LocalTime.now();
             if (bookingDate == null || startTime == null) {
-                throw new IllegalArgumentException("Booking date and start time are required");
+                throw new MyException("Booking date and start time are required");
             }
             List<BookedRoom> ConflictingBookings = bookingRepo.findConflictBookings(
                     bookedRoom.getBookingDate(), bookedRoom.getStartTime(), bookedRoom.getEndTime(), bookedRoom.getRoomId());
             if (!ConflictingBookings.isEmpty()) {
-                throw new Exception("booking already exists for given date and time");
+                throw new MyException("booking already exists for given date and time");
             }
             if (bookingDate.isEqual(currentDate) && startTime.isBefore(now)) {
-                  throw new IllegalArgumentException("start time must be in future if booking is for same day");
+                  throw new MyException("start time must be in future if booking is for same day");
                 }
             String bookingConfirmationCode = Utils.generateRandomConfirmationCode(10);
             bookedRoom.setConfirmationCode(bookingConfirmationCode);
+
             bookingRepo.save(bookedRoom);
             BookedRoomResponse savedBooking=Utils.mapBookingEntityToBookingDTO(bookedRoom);
             return savedBooking;
@@ -127,7 +132,8 @@ return bookingDTOList;
         }
 
     }
-
-
+    public boolean hasBookings(Long roomId) {
+        return bookingRepo.existsByRoomId(roomId);
+    }
 
 }

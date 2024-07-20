@@ -19,7 +19,7 @@ public class CityResponse extends CommonAPIResponse{
     private long id;
     private String name;
     private String state;
-    private int totalSites;
+  //  private int totalSites;
     private List<Site> sites;
     private int statusCode;
 

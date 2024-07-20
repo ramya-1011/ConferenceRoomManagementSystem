@@ -34,7 +34,7 @@ public class SiteService implements ISiteService {
             site1.setSiteId(siteRequest.getSiteId());
             site1.setDescription(siteRequest.getDescription());
             site1.setPinCode(siteRequest.getPinCode());
-            site1.setTotalFloors(siteRequest.getTotalFloors());
+          //  site1.setTotalFloors(siteRequest.getTotalFloors());
             City city = cityRepo.findById(siteRequest.getCityId()).orElseThrow(()-> new MyException("city not found"));
             site1.setCity(city);
             Site savedSite = siteRepo.save(site1);
@@ -76,7 +76,7 @@ public class SiteService implements ISiteService {
             try {
                 Site site = siteRepo.findById(id).orElseThrow(()-> new MyException("site not found"));
                 if (siteRequest.getSiteId() != null) site.setSiteId( siteRequest.getSiteId());
-                if (siteRequest.getTotalFloors() != 0) site.setTotalFloors(  siteRequest.getTotalFloors());
+             //   if (siteRequest.getTotalFloors() != 0) site.setTotalFloors(  siteRequest.getTotalFloors());
                 if (siteRequest.getPinCode() != null) site.setPinCode(  siteRequest.getPinCode());
                 if(siteRequest.getDescription()!=null) site.setDescription(siteRequest.getDescription());
                 City city=cityRepo.findById(siteRequest.getCityId()).orElseThrow(()-> new MyException("no city"));

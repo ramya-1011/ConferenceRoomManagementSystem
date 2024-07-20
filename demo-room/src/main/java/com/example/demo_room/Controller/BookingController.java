@@ -1,9 +1,11 @@
 package com.example.demo_room.Controller;
 
+import com.example.demo_room.Exception.MyException;
 import com.example.demo_room.Model.BookedRoom;
 import com.example.demo_room.Repository.BookingRepo;
 import com.example.demo_room.Service.Implementation.BookingService;
 import com.example.demo_room.dto.BookedRoomResponse;
+import com.example.demo_room.dto.Response;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +28,8 @@ public class BookingController {
         try{
             BookedRoomResponse createdBooking=bookingService.addBooking( room);
             return ResponseEntity.ok(createdBooking);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (MyException e){
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(),false));
         }
 
     }

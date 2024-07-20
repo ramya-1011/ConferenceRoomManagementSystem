@@ -31,7 +31,6 @@ public class FloorService {
         try {
              Floor floor1= new Floor();
              floor1.setFloorId(floorRequest.getFloorId());
-             floor1.setTotalRooms(floorRequest.getTotalRooms());
             City city = cityRepo.findById(floorRequest.getCityId()).orElseThrow(()->new MyException("City not found with id"));
             Site site=siteRepo.findById(floorRequest.getSiteId()).orElseThrow(()-> new MyException("Site not Found"));
               if(!site.getCity().equals(city)){
@@ -57,13 +56,16 @@ public class FloorService {
             try{
                 Floor floor=floorRepo.findById(id).orElseThrow(()->new MyException("floor not found"));
                 if(floorRequest.getFloorId()!=null) floor.setFloorId(floorRequest.getFloorId());
-                if(floorRequest.getTotalRooms()!=0) floor.setTotalRooms(floorRequest.getTotalRooms());
+             //   if(floorRequest.getTotalRooms()!=0) floor.setTotalRooms(floorRequest.getTotalRooms());
                 City city =cityRepo.findById(floorRequest.getCityId()).orElseThrow(()->new MyException("city not found"));
                 Site site=siteRepo.findById(floorRequest.getSiteId()).orElseThrow(()-> new MyException("Site not Found"));
                 if(!site.getCity().equals(city)){
                     throw new IllegalArgumentException("site id mentioned is not in the city selected");
                 }
+                floor.setCity(city);
+                floor.setSite(site);
                  floorRepo.save(floor);
+
                 response.setResponseCode(Constants.ResponseCode.SUCCESS.value());
                 response.setResponseMessage("updated");
                 return Utils.mapFloorEntityToFloorResponse(floor);

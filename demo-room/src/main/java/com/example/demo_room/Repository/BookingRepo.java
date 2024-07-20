@@ -22,5 +22,9 @@ public interface BookingRepo extends JpaRepository<BookedRoom,Long> {
                                           @Param("startTime") LocalTime startTime,
                                           @Param("endTime") LocalTime endTime,
                                           @Param("roomId") long roomId);
+    boolean existsByRoomId(Long roomId);
 
+
+    void deleteByRoomId(long roomId);
+    void deleteByRoomCityId(int cityId);
 }

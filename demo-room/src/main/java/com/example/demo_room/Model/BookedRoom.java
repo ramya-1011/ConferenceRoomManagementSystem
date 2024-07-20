@@ -46,7 +46,7 @@ public class BookedRoom {
     private int attendees;
     @NotNull(message="please Enter the date for booking")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "date cant be in the past")
+  //  @FutureOrPresent(message = "date cant be in the past")
     private LocalDate bookingDate;
 
     private LocalTime startTime;
@@ -54,9 +54,9 @@ public class BookedRoom {
     private LocalTime endTime;
     private String confirmationCode;
     private String status;
-@JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="cRoom_id")
+
+    @ManyToOne
+    @JoinColumn(name="cRoom_Id")
     private ConferenceRoom room;
     public BookedRoom(int roomId, BookedRoom bookingRequest) {
     }

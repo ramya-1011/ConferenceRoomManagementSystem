@@ -197,6 +197,10 @@ import java.util.List;
             return  Utils.mapCRoomListEntityToCRoomListDTO(rooms);
 
         }
+//        public boolean hasBookingsByCity(Integer id) {
+//             roomRepo.findByCityId(id);
+//        }
+
 
     }
 

@@ -22,7 +22,7 @@ public class City {
     private int id;
   private String name;
     private String state;
-    private int totalSites;
+   // private int totalSites;
 @JsonIgnore
    @OneToMany  (mappedBy = "city",cascade = CascadeType.ALL,orphanRemoval = true)
 

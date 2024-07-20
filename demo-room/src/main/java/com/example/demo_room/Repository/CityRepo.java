@@ -12,4 +12,5 @@ public interface CityRepo extends JpaRepository<City,Integer> {
 
     Optional<City> findById(int id);
     List<City> findAllByOrderByNameAsc();
+
 }

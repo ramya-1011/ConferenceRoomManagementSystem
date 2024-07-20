@@ -19,7 +19,7 @@ public class Floor   {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String floorId;
-    private int totalRooms;
+   // private int totalRooms;
     @ManyToOne
     @JoinColumn(name = "site_id")
     private Site site;

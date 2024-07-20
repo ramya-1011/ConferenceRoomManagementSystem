@@ -52,7 +52,7 @@ public class SiteController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 @PutMapping("/update/{id}")
-    public ResponseEntity<SiteResponse> updateSite(@PathVariable int id,@Valid @RequestBody SiteRequest site){
+    public ResponseEntity<SiteResponse> updateSite(@PathVariable int id,  @RequestBody SiteRequest site){
     SiteResponse updatedSite = siteService.updateSite(id, site);
     if (updatedSite == null) {
         return ResponseEntity.notFound().build();

@@ -22,7 +22,7 @@ public class Site {
     private String description;
     private String pinCode;
 
-    private int totalFloors;
+   // private int totalFloors;
     private String locationName;
 
     @ManyToOne

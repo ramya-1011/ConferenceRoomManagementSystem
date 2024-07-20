@@ -16,17 +16,17 @@ public class SiteRequest {
     @NotEmpty(message = "siteId cannot be empty")
     private String siteId;
     @Size(max = 20, message = "The description must be at most 20 letters long.")
-    @StringCharacter
+    @Alphanumeric
     @NotEmpty(message = "description cannot be empty")
     private String description;
     @Size(max = 6,min = 6,message = "valid pinCode is required of 6  digits")
     @Numeric
     @NotEmpty(message = "pinCode cannot be empty")
     private String pinCode;
-    @Min(value = 1,message = "total floors cant be 0")
-    @Max(value = 30,message = "floors cannot exceed 30")
-    @NotNull(message = "totalFloors cannot be empty")
-    private int totalFloors;
+//    @Min(value = 1,message = "total floors cant be 0")
+//    @Max(value = 30,message = "floors cannot exceed 30")
+//    @NotNull(message = "totalFloors cannot be empty")
+//    private int totalFloors;
     @JustNumber
     @NotNull(message = "cityId cannot be empty")
     private int cityId;

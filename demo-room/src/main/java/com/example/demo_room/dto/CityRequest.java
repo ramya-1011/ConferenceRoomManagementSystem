@@ -24,12 +24,12 @@ public class CityRequest {
     @Column(unique = true)
     private String name;
     @NotEmpty(message = "name of state cannot be empty")
-    @StringCharacter
+
     @Size(max = 20, message = "The attribute must be at most 20 characters long.")
     private String state;
-    @NotNull(message = "total sites can't be blank")
-    @Min(value = 1,message = "minimum value should be 1")
-    @JustNumber
-    private int totalSites;
+//    @NotNull(message = "total sites can't be blank")
+//    @Min(value = 1,message = "minimum value should be 1")
+//    @JustNumber
+//    private int totalSites;
 
 }

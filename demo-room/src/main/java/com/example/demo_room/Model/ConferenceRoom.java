@@ -29,7 +29,7 @@ public class ConferenceRoom {
     private String description;
     private String type;
     @ManyToOne
-    @JoinColumn(name = "city_Id")
+    @JoinColumn(name = "cityId")
     private City city;
     @ManyToOne
     @JoinColumn(name = "site_Id")
@@ -38,7 +38,7 @@ public class ConferenceRoom {
     @JoinColumn(name = "floor_Id")
     private Floor floor;
     @JsonIgnore
-    @OneToMany ( mappedBy = "room",fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany ( mappedBy = "room" ,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<BookedRoom> bookings ;
 
     public ConferenceRoom() {

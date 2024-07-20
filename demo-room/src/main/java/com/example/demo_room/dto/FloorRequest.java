@@ -14,15 +14,15 @@ public class FloorRequest {
     @Alphanumeric
     @NotEmpty(message = "floorId cannot be empty")
     private String floorId;
-    @Min(value =0,message = "rooms cant be less than 0")
-    @Max(value = 30)
-    @NotNull(message = "totalRooms cannot be empty")
-@JustNumber
-    private int totalRooms;
+//    @Min(value =0,message = "rooms cant be less than 0")
+//    @Max(value = 30)
+//    @NotNull(message = "totalRooms cannot be empty")
+//@JustNumber
+//    private int totalRooms;
     @NotNull(message = "siteId cannot be empty")
-    @JustNumber
+
     private int siteId;
     @NotNull(message = "cityId cannot be empty")
-    @JustNumber
+
     private int cityId;
 }

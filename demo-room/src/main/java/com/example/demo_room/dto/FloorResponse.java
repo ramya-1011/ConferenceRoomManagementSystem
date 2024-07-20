@@ -17,7 +17,8 @@ import java.util.List;
 public class FloorResponse extends CommonAPIResponse {
     private int id;
     private String floorId;
-    private int totalRooms;
+  //  private int totalRooms;
     private Site site;
+    private City city;
     List<ConferenceRoom> rooms;
 }

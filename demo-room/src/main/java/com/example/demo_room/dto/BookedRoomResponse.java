@@ -26,7 +26,7 @@ public class BookedRoomResponse extends CommonAPIResponse{
     private LocalTime startTime;
     private LocalTime endTime;
     private String confirmationCode;
-    private  RoomResponse room;
+    private    RoomResponse room;
 
 
 }

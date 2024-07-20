@@ -18,7 +18,7 @@ public class SiteResponse extends CommonAPIResponse {
     private String siteId;
     private String description;
     private String pinCode;
-    private int totalFloors;
+   // private int totalFloors;
     private String locationName;
     private int statusCode;
     private City city;
