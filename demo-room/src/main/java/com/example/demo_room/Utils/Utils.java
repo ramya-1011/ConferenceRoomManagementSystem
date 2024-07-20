@@ -20,15 +20,15 @@ public class Utils {
         }
         return stringBuilder.toString();
     }
-    public static RoomResponse mapConferenceRoomEntityToRoomResponse(ConferenceRoom Room) {
+    public static RoomResponse mapConferenceRoomEntityToRoomResponse(ConferenceRoom room) {
         RoomResponse cRoomDTO = new RoomResponse();
-        cRoomDTO.setId(Room.getId());
-        cRoomDTO.setCapacity(Room.getCapacity());
-        cRoomDTO.setCity(Room.getCity());
-        cRoomDTO.setSite(Room.getSite());
-        cRoomDTO.setFloor(Room.getFloor());
-        cRoomDTO.setType(Room.getType());
-        cRoomDTO.setDescription(Room.getDescription());
+        cRoomDTO.setId(room.getId());
+        cRoomDTO.setCapacity(room.getCapacity());
+        cRoomDTO.setCity(room.getCity());
+        cRoomDTO.setSite(room.getSite());
+        cRoomDTO.setFloor(room.getFloor());
+        cRoomDTO.setType(room.getType());
+        cRoomDTO.setDescription(room.getDescription());
 
         return  cRoomDTO;
     }
@@ -62,14 +62,14 @@ public class Utils {
 
         return  response;
     }
-    public static List< RoomResponse> mapCRoomListEntityToCRoomListDTO(List<ConferenceRoom> RoomsList){
-        return RoomsList.stream().map(Utils::mapConferenceRoomEntityToRoomResponse ).collect(Collectors.toList());
+    public static List< RoomResponse> mapCRoomListEntityToCRoomListDTO(List<ConferenceRoom> roomsList){
+        return roomsList.stream().map(Utils::mapConferenceRoomEntityToRoomResponse ).collect(Collectors.toList());
     }
-    public static List< FloorResponse> mapFloorListEntityToFloorListDTO(List<Floor> FloorList){
-        return FloorList.stream().map(Utils::mapFloorEntityToFloorResponse).collect(Collectors.toList());
+    public static List< FloorResponse> mapFloorListEntityToFloorListDTO(List<Floor> floorList){
+        return floorList.stream().map(Utils::mapFloorEntityToFloorResponse).collect(Collectors.toList());
     }
-    public static List< SiteResponse> mapSiteListEntityT0SiteListDTO(List< Site> SitesList){
-        return SitesList.stream().map(Utils::mapSiteEntityToSiteResponse ).collect(Collectors.toList());
+    public static List< SiteResponse> mapSiteListEntityT0SiteListDTO(List< Site> sitesList){
+        return sitesList.stream().map(Utils::mapSiteEntityToSiteResponse ).collect(Collectors.toList());
     }
 
     public static List<BookedRoomResponse> mapBookingListEntityToBookingListDTO(List<BookedRoom> bookingList) {
