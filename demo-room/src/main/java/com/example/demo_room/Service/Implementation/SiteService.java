@@ -8,7 +8,7 @@ import com.example.demo_room.Repository.SiteRepo;
 import com.example.demo_room.Service.Interface.ISiteService;
 import com.example.demo_room.Utils.Utils;
 import com.example.demo_room.dto.*;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class SiteService implements ISiteService {
     private final SiteRepo siteRepo;
     @Autowired
     private CityRepo cityRepo;
+    private final EntityManager entityManager;
 
     @Override
     public SiteResponse addNewSite(SiteRequest siteRequest) {
@@ -118,6 +120,24 @@ public class SiteService implements ISiteService {
      Page<Site> siteList=siteRepo.findAll(PageRequest.of(offset,size));
         return siteList ;
     }
+    @Transactional
+    public void forcedDeleteSite(Long siteId) {
+        // Delete all bookings associated with the city's rooms
+        entityManager.createQuery(
+                        "DELETE FROM BookedRoom br WHERE br.roomId IN " +
+                                "(SELECT r.id FROM ConferenceRoom r WHERE r.site.id = :siteId)")
+                .setParameter("siteId", siteId)
+                .executeUpdate();
 
+        entityManager.createQuery(
+                        "DELETE FROM ConferenceRoom r WHERE r.site.id = :siteId")
+                .setParameter("siteId", siteId)
+                .executeUpdate();
+
+        Site site = entityManager.find(Site.class, siteId);
+        if (site != null) {
+            entityManager.remove(site);
+        }
+    }
 
 }

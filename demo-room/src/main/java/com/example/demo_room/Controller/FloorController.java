@@ -72,7 +72,15 @@ public class FloorController {
     List<FloorResponse> floorList = floorService.getFloors(cityId,siteId);
     return ResponseEntity.ok(floorList);
 }
-
+    @DeleteMapping("/force/{floorId}")
+    public ResponseEntity<?> forceDeleteFloor(@PathVariable Long floorId) {
+        try {
+            floorService.forcedDeleteFloor(floorId);
+            return ResponseEntity.ok().body("Floor and all associated bookings have been deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while forcibly deleting the floor."+ e.getMessage());
+        }
+    }
 
     }
 

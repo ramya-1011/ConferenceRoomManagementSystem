@@ -10,12 +10,16 @@ import com.example.demo_room.Repository.SiteRepo;
 import com.example.demo_room.Utils.Constants;
 import com.example.demo_room.Utils.Utils;
 import com.example.demo_room.dto.*;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FloorService {
     @Autowired
     private FloorRepo floorRepo;
@@ -23,6 +27,7 @@ public class FloorService {
     private CityRepo cityRepo;
     @Autowired
     private SiteRepo siteRepo;
+    private final EntityManager entityManager;
 
     public FloorResponse addNewLocation( FloorRequest floorRequest) throws Exception {
 
@@ -118,7 +123,8 @@ public class FloorService {
         return response;
     }
 
-public List<FloorResponse> getFloors(Integer cityId,Integer siteId){
+
+            public List<FloorResponse> getFloors(Integer cityId,Integer siteId){
         List<Floor> floors;
 if(cityId!=null && siteId!=null){
     floors=floorRepo.getByCityIdAndSiteId(cityId,siteId);
@@ -134,5 +140,23 @@ else {
 }
 return Utils.mapFloorListEntityToFloorListDTO(floors);
 }
+    @Transactional
+    public void forcedDeleteFloor(Long floorId) {
+        // Delete all bookings associated with the city's rooms
+        entityManager.createQuery(
+                        "DELETE FROM BookedRoom br WHERE br.roomId IN " +
+                                "(SELECT r.id FROM ConferenceRoom r WHERE r.floor.id = :floorId)")
+                .setParameter("floorId", floorId)
+                .executeUpdate();
 
+        entityManager.createQuery(
+                        "DELETE FROM ConferenceRoom r WHERE r.floor.id = :floorId")
+                .setParameter("floorId", floorId)
+                .executeUpdate();
+
+         Floor floor = entityManager.find(Floor.class, floorId);
+        if (floor != null) {
+            entityManager.remove(floor);
+        }
+    }
 }

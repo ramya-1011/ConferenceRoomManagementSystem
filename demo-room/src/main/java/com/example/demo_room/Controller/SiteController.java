@@ -67,5 +67,14 @@ public class SiteController {
         Page<Site> sitesWithPagination= siteService.searchSite(offset,pageSize);
         return new APIResponse<>(sitesWithPagination.getSize(),sitesWithPagination);
     }
+    @DeleteMapping("/force/{siteId}")
+    public ResponseEntity<?> forceDeleteSite(@PathVariable Long siteId) {
+        try {
+             siteService.forcedDeleteSite(siteId);
+            return ResponseEntity.ok().body("Site and all associated bookings have been deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while forcibly deleting the site."+ e.getMessage());
+        }
+    }
 
 }
