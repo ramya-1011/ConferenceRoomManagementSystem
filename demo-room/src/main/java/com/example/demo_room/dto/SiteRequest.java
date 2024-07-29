@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class SiteRequest {
 
-    @Size(max = 10, message = "The siteId must be at most 10 letters long.")
+    @Size(max = 15, message = "The siteId must be at most 10 letters long.")
     @Alphanumeric
     @NotEmpty(message = "siteId cannot be empty")
     private String siteId;
